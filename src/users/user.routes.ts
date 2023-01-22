@@ -1,21 +1,15 @@
 import * as express from 'express';
 
-import { 
-    getUsers,
-    getUserById,
-    updateUser,
-    deleteUser,
-    getSuggestedUsers
- } from './user.service';
+import {UserService} from './user.service';
 
 
 const router = express.Router();
 
 
-router.get('/', getUsers);
-router.get('/:id', getUserById);
-router.put('/:id', updateUser);
-router.delete('/:id', deleteUser);
-router.post('/suggest', getSuggestedUsers);
+router.get('/', UserService.getUsers);
+router.get('/:id', UserService.getUserById);
+router.put('/:id', UserService.updateUser);
+router.delete('/:id', UserService.deleteUser);
+router.post('/suggest', UserService.getSuggestedUsers);
 
 export default router;

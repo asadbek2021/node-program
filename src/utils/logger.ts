@@ -1,13 +1,17 @@
- class Logger {
-    constructor(){}
+import {green,redBright} from "chalk"; 
 
+ class Logger {
+
+
+    constructor(){}
+    
     info(text: string) {
-        console.log(`INFO: ${text}`);
+        console.log(`[${green('INFO')}]: ${text}`,);
         return;
     }
 
     error(status: number, message: string) {
-        console.error(`STATUS: ${status} | ${message}`)
+        console.error(`[${redBright('STATUS')}]: ${status} | ${message}`)
     }
 }
 

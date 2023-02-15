@@ -1,6 +1,6 @@
-import { Model, DataTypes } from "sequelize";
+import { DataTypes } from "sequelize";
 
-import * as Loaders from '../loaders';
+import * as Loaders from '../../loaders';
 
 
 export const User = Loaders.sequelize.define('user',{

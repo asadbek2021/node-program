@@ -1,7 +1,6 @@
 import * as express from 'express';
 
-import { UserRouter } from './entities/users'
-import { GroupRouter } from './entities/groups'
+import { UserRouter, GroupRouter } from './entities'
 import { AuthRouter } from './auth'
 import { auth, errorHandler } from './middlewares';
 import * as Loaders from './loaders';

@@ -17,7 +17,7 @@ export const sequelize = new Sequelize({
 export async function connectPostgres() {
   try{
     await sequelize.authenticate();
-    logger.info('Connected to postgres!')
+    logger.info('Connected to postgres and syncronised!')
   } catch(err) {
     return new HttpError(500, err.message);
   }

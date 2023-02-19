@@ -1,9 +1,9 @@
-import { Model, DataTypes } from "sequelize";
+import { DataTypes } from "sequelize";
 
 import * as Loaders from '../../loaders';
 
 
-export const Group = Loaders.sequelize.define('group',{
+export const Group = Loaders.sequelize.define('group', {
     id: {
         type: DataTypes.UUID,
         unique: true,
@@ -14,7 +14,13 @@ export const Group = Loaders.sequelize.define('group',{
         type: DataTypes.STRING,
     },
     permissions: {
-       type: DataTypes.ARRAY(DataTypes.STRING),
-       defaultValue: false, 
+       type: DataTypes.JSON,
+       defaultValue: false,
+       set(value: string[]) {
+         this.setDataValue('permissions', value.join(';'));
+       },
+       get () {
+         return this.getDataValue('permissions').split(';');
+       }
     }
-});
+}, {timestamps: false});

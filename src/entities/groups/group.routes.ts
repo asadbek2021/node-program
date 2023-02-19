@@ -11,5 +11,6 @@ router.get('/:id', GroupService.getGroupById);
 router.put('/:id', GroupService.updateGroup);
 router.delete('/:id', GroupService.deleteGroup);
 router.post('/', GroupService.createGroup);
+router.post('/add-user', GroupService.addUsersToGroup);
 
 export default router;

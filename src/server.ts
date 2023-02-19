@@ -1,5 +1,5 @@
 import app from './api';
-import { config } from './config/config'
+import { config } from './config'
 import { logger } from './utils';
 
 const server = app.listen(config.PORT, ()=> {

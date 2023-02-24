@@ -1,24 +1,26 @@
 import { Sequelize } from "sequelize";
+import { Logger } from "winston";
 
-import {config} from '../config';
-import {HttpError, logger} from '../utils';
+import * as Config from '../config';
+import {HttpError} from '../utils';
 
 
 export const sequelize = new Sequelize({
-    host: config.POSTGRES.HOST,
-    database: config.POSTGRES.DATABASE_NAME,
-    username: config.POSTGRES.USER,
-    password: config.POSTGRES.PASSWORD,
-    port: config.POSTGRES.PORT,
+    host: Config.POSTGRES.HOST,
+    database: Config.POSTGRES.DATABASE_NAME,
+    username: Config.POSTGRES.USER,
+    password: Config.POSTGRES.PASSWORD,
+    port: Config.POSTGRES.PORT,
     dialect: 'postgres',
+    logging: false
 });
 
 
-export async function connectPostgres() {
+export async function connectPostgres(logger: Logger) {
   try{
     await sequelize.authenticate();
     logger.info('Connected to postgres and syncronised!')
-  } catch(err) {
-    return new HttpError(500, err.message);
+  } catch(error) {
+    return new HttpError(500, error);
   }
 }

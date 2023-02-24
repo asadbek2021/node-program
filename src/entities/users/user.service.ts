@@ -8,6 +8,8 @@ import { HttpError } from '../../utils';
 
 export class UserService {
 
+    private static module = 'UserService';
+
   constructor(){}
 
   static  async getUsers(_: express.Request, res: express.Response, next: express.NextFunction ){
@@ -15,8 +17,9 @@ export class UserService {
             const users = await User.findAll();
             res.send(users);
             return;
-        } catch(err) {
-            next(err);
+        } catch(error) {
+            const newError = {...error, module: this.module, method: 'getUsers'}
+            next(newError);
         }
     }
 
@@ -24,12 +27,13 @@ export class UserService {
         try{
             const user = await User.findOne({where: {id: req.params.id}});
             if(user == null){
-                throw new HttpError(404, 'User not found')
+                throw new HttpError(404, {message: 'User is not found'})
             }
             res.status(200).send(user);
             return;
-        } catch(err) {
-            next(err);
+        } catch(error) {
+            const newError = {...error, module: this.module, method: 'getUserById'}
+            next(newError);
         }
     
     }
@@ -39,12 +43,13 @@ export class UserService {
             
             const user = await User.findOne({where: {id: req.params.id}});
             if(user == null){
-                throw new HttpError(404, 'User not found')
+                throw new HttpError(404, {message: 'User is not found'});
             }
             await user.update({...req.body})
             return res.status(203).send({message: 'User has been updated'})
-        } catch(err) {
-            next(err)
+        } catch(error) {
+            const newError = {...error, module: this.module, method: 'updateUser'}
+            next(newError);
         }
     }
 
@@ -52,13 +57,14 @@ export class UserService {
         try{
             const user = await User.findOne({where: {id: req.params.id}});
             if(user == null){
-                throw new HttpError(404, 'User not found')
+                throw new HttpError(404, {message: 'User is not found'});
             }
             user.set({is_deleted: true})
             await user.save();
             return res.status(204).send({message: 'User has been deleted'})
-        } catch(err) {
-            next(err)
+        } catch(error) {
+            const newError = {...error, module: this.module, method: 'deleteUser'}
+            next(newError);
         }
     }
 
@@ -68,21 +74,22 @@ export class UserService {
             if(limit == 0) {
                 res.status(200).send([]);
                 return;
-              }
+            }
             if(limit < 0){
-            throw new HttpError(400, 'Limit can`t be negative');
+                throw new HttpError(400, {message: 'Limit can`t be negative'});
             }
             const filteredUsers = await User.findAll({
                 limit, 
                 where: {login: {[Op.iLike]: `%${substring}%`}}, 
                 order: [
                     ['login','ASC']
-                        ]
+                ]
             });
-              res.status(200).send(filteredUsers);
-              return;
-        } catch(err) {
-            next(err);
+            res.status(200).send(filteredUsers);
+            return;
+        } catch(error) {
+            const newError = {...error, module: this.module, method: 'getSuggestedUsers'}
+            next(newError);
         }
     
     }

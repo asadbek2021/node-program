@@ -1,10 +1,17 @@
 import * as http from 'http';
 
+type ErrorBody = {message: string, [key:string]:any}
+
 export class HttpError extends Error {
 
-    constructor(public statusCode: number, message: string = http.STATUS_CODES[statusCode] ?? '' ) {
-        super(message);
+     statusCode: number;
+     body: ErrorBody;
+
+    constructor(statusCode: number, body: ErrorBody) {
+        super(body.message);
         this.name = 'HTTP Error';
+        this.statusCode = statusCode;
+        this.body = body;
     }
 
 }

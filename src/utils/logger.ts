@@ -1,18 +1,23 @@
-import {green,redBright} from "chalk"; 
+import winston from "winston";
 
- class Logger {
+import * as Config from '../config';
+
+const transports = {
+    console: new winston.transports.Console({level: 'info'}),
+    file: new winston.transports.File({filename: 'error.log',level: 'error'})
+};
 
 
-    constructor(){}
-    
-    info(text: string) {
-        console.log(`[${green('INFO')}]: ${text}`,);
-        return;
-    }
+export const logger = winston.createLogger({
+    format: winston.format.combine(
+        winston.format.json(),
+        winston.format.timestamp(),
+        winston.format.colorize({all: true})
+    ),
+    level: Config.LOG_LEVEL,
+    transports: [
+        transports.console,
+        transports.file
+    ]
+})
 
-    error(status: number, message: string) {
-        console.error(`[${redBright('STATUS')}]: ${status} | ${message}`)
-    }
-}
-
-export default new Logger();

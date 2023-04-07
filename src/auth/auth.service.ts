@@ -42,7 +42,7 @@ export async function register(req: express.Request, res: express.Response, next
 
 
 function generateToken(payload: any, secret: string) {
-    const token = jwt.sign(payload, secret, {expiresIn: 10000});
+    const token = jwt.sign(payload, secret, {expiresIn: '2h'});
     return token;
 }
 

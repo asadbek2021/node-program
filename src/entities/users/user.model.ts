@@ -3,7 +3,7 @@ import { DataTypes } from "sequelize";
 import * as Loaders from '../../loaders';
 
 
-export const User = Loaders.sequelize.define('User',{
+export const User = Loaders.sequelize.define('user',{
     id: {
         type: DataTypes.UUID,
         unique: true,

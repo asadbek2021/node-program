@@ -1,10 +1,8 @@
 import * as express from 'express';
-import {v4 as uuid} from 'uuid';
+import { Op } from 'sequelize';
 
 import { User } from './user.model';
-import {USER_SCHEMA, users} from '../common';
-import { HttpError } from '../utils';
-import { Op } from 'sequelize';
+import { HttpError } from '../../utils';
 
 
 

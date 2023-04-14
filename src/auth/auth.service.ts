@@ -1,9 +1,8 @@
 import * as express from 'express';
 import {v4 as uuid} from 'uuid';
 
-import { User } from '../users/user.model';
+import { User } from '../entities/users/user.model';
 import { HttpError } from '../utils';
-import { USER_SCHEMA, users } from '../common';
 
 
 export async function login(req: express.Request, res: express.Response, next: express.NextFunction ){

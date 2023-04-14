@@ -1,6 +1,6 @@
 import * as express from 'express';
 
-import { UserRouter } from './users'
+import { UserRouter, GroupRouter } from './entities'
 import { AuthRouter } from './auth'
 import { auth, errorHandler } from './middlewares';
 import * as Loaders from './loaders';
@@ -16,6 +16,7 @@ app.use('/api/auth', AuthRouter);
 app.use(auth);
 // all protected pages
 app.use('/api/user', UserRouter);
+app.use('/api/group', GroupRouter);
 // the last catches all errors
 app.use(errorHandler);
 

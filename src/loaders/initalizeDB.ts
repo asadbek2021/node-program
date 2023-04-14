@@ -1,15 +1,16 @@
-import {connectPostgres, sequelize } from './postgres';
-import {logger} from '../utils'
-import { setRelations } from '../entities/';
+import { Logger } from 'winston';
 
-export async function init() {
+import {connectPostgres, sequelize } from './postgres';
+import { setRelations } from '../entities';
+
+export async function init(logger: Logger) {
+    const postgresLogger = logger.child({module: 'Postgres'})
     try{
-        logger.info('Started Connecting to DB!')
-        await connectPostgres();
+        postgresLogger.info('Started Connecting to DB!')
+        await connectPostgres(postgresLogger);
         await setRelations();
         await sequelize.sync({alter: true});
-    } catch(err) {
-        logger.error(500, err.message);
-
+    } catch(error) {
+        postgresLogger.error(error);
     }
 }

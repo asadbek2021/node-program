@@ -1,55 +1,57 @@
 import {Request, Response, NextFunction} from 'express';
-import {v4 as uuid} from 'uuid';
+import {v4 as uuid, validate} from 'uuid';
+import { Op } from 'sequelize';
 
 import { Group } from './group.model';
-import { HttpError, logger } from '../../utils';
+import { HttpError } from '../../utils';
 import { GROUP_SCHEMA } from '../../common';
-import { UserGroup } from '../relations';
 import { User } from '../users/user.model';
-import { Op } from 'sequelize';
 import { sequelize } from '../../loaders';
 
 
 
 export class GroupService {
 
+    private static module = 'GroupService';
+
     constructor(){}
 
-    static  async getGroups(_: Request, res: Response, next: NextFunction ){
+    static async getGroups(_: Request, res: Response, next: NextFunction ){
         try{
             const groups = await Group.findAll();
             res.send(groups);
             return;
-        } catch(err) {
-            next(err);
+        } catch(error) {
+            const newErr = {...error, module: this.module, method: 'getGroups'}
+            next(newErr);
         }
     }
 
-    static async  getGroupById(req: Request, res: Response, next: NextFunction ){
+    static async getGroupById(req: Request, res: Response, next: NextFunction ){
         try{
             const group = await Group.findOne({where: {id: req.params.id}});
             if(group == null){
-                throw new HttpError(404, 'Group not found')
+                throw new HttpError(404, {message:'Group not found'})
             }
             res.status(200).send(group);
             return;
-        } catch(err) {
-            next(err);
+        } catch(error) {
+            next(error);
         }
     
     }
 
-    static async  updateGroup(req: Request, res: Response, next: NextFunction ){
+    static async updateGroup(req: Request, res: Response, next: NextFunction ){
         try{
-            
             const group = await Group.findOne({where: {id: req.params.id}});
             if(group == null){
-                throw new HttpError(404, 'Group not found')
+                throw new HttpError(404, {message: 'Group not found'})
             }
             await group.update({...req.body})
             return res.status(203).send({message: 'Group has been updated'})
-        } catch(err) {
-            next(err)
+        } catch(error) {
+            const newErr = {...error, module: this.module, method: 'updateGroup'}
+            next(newErr);
         }
     }
 
@@ -57,12 +59,13 @@ export class GroupService {
         try{
             const group = await Group.findOne({where: {id: req.params.id}});
             if(group == null){
-                throw new HttpError(404, 'Group not found')
+                throw new HttpError(404, {message: 'Group not found'})
             }
             await group.destroy()
             return res.status(204).send({message: 'Group has been deleted'})
-        } catch(err) {
-            next(err)
+        } catch(error) {
+            const newErr = {...error, module: this.module, method: 'deleteGroup'}
+            next(newErr);
         }
     }
 
@@ -72,8 +75,9 @@ export class GroupService {
             GROUP_SCHEMA.validate(entryGroup);
             const group =  await Group.create({id: uuid(), ...entryGroup})
             res.status(201).send(group);
-        } catch(err) {
-            next(err);
+        } catch(error) {
+            const newErr = {...error, module: this.module, method: 'createGroup'}
+            next(newErr);
         }
     }
 
@@ -81,9 +85,17 @@ export class GroupService {
         try {
             await sequelize.transaction().then( async (transaction) => {
                 const {userIds, groupId} = req.body;
-                if(userIds == null || groupId == null) {
-                    throw new HttpError(400, 'User or Group was not specified!');
+                if(userIds == null || groupId == null || userIds?.length == 0) {
+                    throw new HttpError(400, {message: 'User or Group was not specified!'});
                 };
+                userIds.forEach((userId: string) => {
+                    if(!validate(userId)) {
+                        throw new HttpError(400, {message: 'Invalid user id!', userId});
+                    }
+                })
+                if(!validate(groupId)){
+                    throw new HttpError(400, {message: 'Invalid group id!', groupId}); 
+                }
                 const users = await User.findAll({
                     where: { 
                         id: {
@@ -95,11 +107,10 @@ export class GroupService {
                     where: { id: groupId }
                 });
                 if(users == null || group == null || users.length == 0) {
-                    throw new HttpError(400, 'There is no such group or users!');
+                    throw new HttpError(400, {message: 'There is no such group or users!'});
                 }
                 
                 users.forEach(async(user) => {
-                  // Will happen in parallel since `forEach` doesn't wait like `for ..of`
                   //@ts-ignore
                   await group.addUsers(user, { transaction });
                   transaction.commit();
@@ -107,7 +118,8 @@ export class GroupService {
             });
             res.status(201).send({message: 'Users have been added successfully ;)'})
         } catch(error) {
-            next(error);
+            const newErr = {...error, module: this.module, method: 'addUsersToGroup'}
+            next(newErr);
         }
     }
 

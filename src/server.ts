@@ -1,15 +1,18 @@
 import app from './api';
-import { config } from './config'
+import *  as Config from './config'
 import { logger } from './utils';
 
-const server = app.listen(config.PORT, ()=> {
-    console.log(`Server is running on ${config.PORT} port`)
+const appLogger = logger.child({module: 'APP'});
+
+const server = app.listen(Config.APP_PORT, ()=> {
+    appLogger.info(`Server is running on ${Config.APP_PORT} port`)
 },)
 
 
 process.on('SIGTERM', () => {
-    logger.info('SIGTERM signal received: closing HTTP server')
+    const log = logger.child({module: 'App'})
+    log.error('SIGTERM signal received: closing HTTP server')
     server.close(() => {
-        logger.info('HTTP server closed')
+        log.info('HTTP server closed')
     })
   })

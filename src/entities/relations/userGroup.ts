@@ -1,4 +1,6 @@
 import { DataTypes } from "sequelize";
+import { Logger } from "winston";
+
 import { sequelize } from "../../loaders";
 import { Group } from "../groups/group.model";
 import { User } from "../users/user.model";

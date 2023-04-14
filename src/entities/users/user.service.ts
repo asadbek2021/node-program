@@ -15,8 +15,7 @@ export class UserService {
   static  async getUsers(_: express.Request, res: express.Response, next: express.NextFunction ){
         try{
             const users = await User.findAll();
-            res.send(users);
-            return;
+          return res.send(users);
         } catch(error) {
             const newError = {...error, module: this.module, method: 'getUsers'}
             next(newError);
@@ -29,8 +28,7 @@ export class UserService {
             if(user == null){
                 throw new HttpError(404, {message: 'User is not found'})
             }
-            res.status(200).send(user);
-            return;
+            res.send(user);
         } catch(error) {
             const newError = {...error, module: this.module, method: 'getUserById'}
             next(newError);
@@ -40,13 +38,12 @@ export class UserService {
 
   static async  updateUser(req: express.Request, res: express.Response, next: express.NextFunction ){
         try{
-            
             const user = await User.findOne({where: {id: req.params.id}});
             if(user == null){
                 throw new HttpError(404, {message: 'User is not found'});
             }
             await user.update({...req.body})
-            return res.status(203).send({message: 'User has been updated'})
+            res.status(203).send({message: 'User has been updated'})
         } catch(error) {
             const newError = {...error, module: this.module, method: 'updateUser'}
             next(newError);
@@ -61,7 +58,7 @@ export class UserService {
             }
             user.set({is_deleted: true})
             await user.save();
-            return res.status(204).send({message: 'User has been deleted'})
+            res.status(204).send({message: 'User has been deleted'})
         } catch(error) {
             const newError = {...error, module: this.module, method: 'deleteUser'}
             next(newError);
@@ -72,8 +69,7 @@ export class UserService {
         try{
             const {substring, limit} = req.body;
             if(limit == 0) {
-                res.status(200).send([]);
-                return;
+                return res.status(200).send([]);
             }
             if(limit < 0){
                 throw new HttpError(400, {message: 'Limit can`t be negative'});
@@ -86,7 +82,6 @@ export class UserService {
                 ]
             });
             res.status(200).send(filteredUsers);
-            return;
         } catch(error) {
             const newError = {...error, module: this.module, method: 'getSuggestedUsers'}
             next(newError);

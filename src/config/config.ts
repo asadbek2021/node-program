@@ -12,6 +12,8 @@ const DEFAULT_POSTGRES = {
     HOST: 'localhost'
 }
 
+export const JWT_SECRET = process.env.JWT_SECRET || '';
+
 export const POSTGRES = {
     USER: process.env.POSTGRES_USER || DEFAULT_POSTGRES.USER,   
     PASSWORD: process.env.POSTGRES_PASS || DEFAULT_POSTGRES.PASSWORD,

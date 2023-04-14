@@ -19,8 +19,7 @@ export class GroupService {
     static async getGroups(_: Request, res: Response, next: NextFunction ){
         try{
             const groups = await Group.findAll();
-            res.send(groups);
-            return;
+            return res.send(groups);
         } catch(error) {
             const newErr = {...error, module: this.module, method: 'getGroups'}
             next(newErr);
@@ -31,12 +30,13 @@ export class GroupService {
         try{
             const group = await Group.findOne({where: {id: req.params.id}});
             if(group == null){
-                throw new HttpError(404, {message:'Group not found'})
+                throw new HttpError(404, {message:'Group is not found'})
             }
-            res.status(200).send(group);
+            res.send(group);
             return;
         } catch(error) {
-            next(error);
+            const newErr = {...error, module: this.module, method: 'getGroupById'}
+            next(newErr);
         }
     
     }
@@ -45,7 +45,7 @@ export class GroupService {
         try{
             const group = await Group.findOne({where: {id: req.params.id}});
             if(group == null){
-                throw new HttpError(404, {message: 'Group not found'})
+                throw new HttpError(404, {message: 'Group is not found'})
             }
             await group.update({...req.body})
             return res.status(203).send({message: 'Group has been updated'})
@@ -59,7 +59,7 @@ export class GroupService {
         try{
             const group = await Group.findOne({where: {id: req.params.id}});
             if(group == null){
-                throw new HttpError(404, {message: 'Group not found'})
+                throw new HttpError(404, {message: 'Group is not found'})
             }
             await group.destroy()
             return res.status(204).send({message: 'Group has been deleted'})

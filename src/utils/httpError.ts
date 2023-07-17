@@ -1,5 +1,3 @@
-import * as http from 'http';
-
 type ErrorBody = { message: string; [key: string]: any };
 
 export class HttpError extends Error {

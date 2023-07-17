@@ -1,1 +1,1 @@
-export {setRelations, UserGroup} from './userGroup';
+export { setRelations, UserGroup } from './userGroup';

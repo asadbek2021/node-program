@@ -1,2 +1,2 @@
-export {HttpError} from './httpError'
-export {logger} from './logger'
+export { HttpError } from './httpError';
+export { logger } from './logger';

@@ -1,10 +1,8 @@
 import * as express from 'express';
 
-import {GroupService} from './group.service';
-
+import { GroupService } from './group.service';
 
 const router = express.Router();
-
 
 // router.get('/', GroupService.getGroups);
 router.get('/:id', GroupService.getGroupById);

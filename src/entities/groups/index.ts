@@ -1,2 +1,2 @@
-export { default as GroupRouter} from './group.routes';
-export {Group} from './group.interface'
+export { default as GroupRouter } from './group.routes';
+export { Group } from './group.interface';

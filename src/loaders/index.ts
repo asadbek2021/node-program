@@ -1,2 +1,2 @@
-export {sequelize} from './postgres'
-export {init} from './initalizeDB';
+export { sequelize } from './postgres';
+export { init } from './initalizeDB';

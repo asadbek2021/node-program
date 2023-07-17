@@ -1,10 +1,8 @@
 import * as express from 'express';
 
-import {UserService} from './user.service';
-
+import { UserService } from './user.service';
 
 const router = express.Router();
-
 
 router.get('/', UserService.getUsers);
 router.get('/:id', UserService.getUserById);

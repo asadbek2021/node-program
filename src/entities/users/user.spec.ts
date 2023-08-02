@@ -1,3 +1,12 @@
+import {
+  describe,
+  expect,
+  beforeEach,
+  beforeAll,
+  it,
+  jest,
+} from '@jest/globals';
+
 import { UserService } from './user.service';
 import { HttpError } from '../../utils';
 

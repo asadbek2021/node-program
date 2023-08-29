@@ -9,8 +9,6 @@ import { User } from '../users/user.model';
 import { sequelize } from '../../loaders';
 
 export class GroupService {
-  private static module = 'GroupService';
-
   constructor() {}
 
   static async getGroups(_: Request, res: Response, next: NextFunction) {
@@ -18,8 +16,7 @@ export class GroupService {
       const groups = await Group.findAll();
       return res.send(groups);
     } catch (error) {
-      const newErr = { ...error, module: this.module, method: 'getGroups' };
-      next(newErr);
+      next(error);
     }
   }
 
@@ -29,11 +26,10 @@ export class GroupService {
       if (group == null) {
         throw new HttpError(404, { message: 'Group is not found' });
       }
-      res.send(group);
-      return;
+
+      return res.send(group);
     } catch (error) {
-      const newErr = { ...error, module: this.module, method: 'getGroupById' };
-      next(newErr);
+      next(error);
     }
   }
 
@@ -46,7 +42,7 @@ export class GroupService {
       await group.update({ ...req.body });
       return res.status(203).send({ message: 'Group has been updated' });
     } catch (error) {
-      const newErr = { ...error, module: this.module, method: 'updateGroup' };
+      const newErr = { data: error, module: 'GROUP', method: 'updateGroup' };
       next(newErr);
     }
   }
@@ -60,7 +56,7 @@ export class GroupService {
       await group.destroy();
       return res.status(204).send({ message: 'Group has been deleted' });
     } catch (error) {
-      const newErr = { ...error, module: this.module, method: 'deleteGroup' };
+      const newErr = { data: error, module: 'GROUP', method: 'deleteGroup' };
       next(newErr);
     }
   }
@@ -72,8 +68,7 @@ export class GroupService {
       const group = await Group.create({ id: uuid(), ...entryGroup });
       res.status(201).send(group);
     } catch (error) {
-      const newErr = { ...error, module: this.module, method: 'createGroup' };
-      next(newErr);
+      next(error);
     }
   }
 
@@ -124,12 +119,7 @@ export class GroupService {
         .status(201)
         .send({ message: 'Users have been added successfully ;)' });
     } catch (error) {
-      const newErr = {
-        ...error,
-        module: this.module,
-        method: 'addUsersToGroup',
-      };
-      next(newErr);
+      next(error);
     }
   }
 }

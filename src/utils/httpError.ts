@@ -9,5 +9,7 @@ export class HttpError extends Error {
     this.name = 'HTTP Error';
     this.statusCode = statusCode;
     this.body = body;
+
+    Error.captureStackTrace(this);
   }
 }

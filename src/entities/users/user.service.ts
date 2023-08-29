@@ -5,7 +5,7 @@ import { User } from './user.model';
 import { HttpError } from '../../utils';
 
 export class UserService {
-  private static module = 'UserService';
+  static module = 'UserService';
 
   constructor() {}
 
@@ -18,8 +18,7 @@ export class UserService {
       const users = await User.findAll();
       return res.send(users);
     } catch (error) {
-      const newError = { ...error, module: this.module, method: 'getUsers' };
-      next(newError);
+      next(error);
     }
   }
 
@@ -35,8 +34,7 @@ export class UserService {
       }
       res.send(user);
     } catch (error) {
-      const newError = { ...error, module: this.module, method: 'getUserById' };
-      next(newError);
+      next(error);
     }
   }
 
@@ -53,8 +51,7 @@ export class UserService {
       await user.update({ ...req.body });
       res.status(203).send({ message: 'User has been updated' });
     } catch (error) {
-      const newError = { ...error, module: this.module, method: 'updateUser' };
-      next(newError);
+      next(error);
     }
   }
 
@@ -72,8 +69,7 @@ export class UserService {
       await user.save();
       res.status(204).send({ message: 'User has been deleted' });
     } catch (error) {
-      const newError = { ...error, module: this.module, method: 'deleteUser' };
-      next(newError);
+      next(error);
     }
   }
 
@@ -97,12 +93,7 @@ export class UserService {
       });
       res.status(200).send(filteredUsers);
     } catch (error) {
-      const newError = {
-        ...error,
-        module: this.module,
-        method: 'getSuggestedUsers',
-      };
-      next(newError);
+      next(error);
     }
   }
 }

@@ -1,5 +1,4 @@
 import express from 'express';
-import cors from 'cors';
 
 import { UserRouter, GroupRouter } from './entities';
 import { AuthRouter } from './auth';
@@ -12,12 +11,6 @@ const app = express();
 Loaders.init(logger);
 
 app.use(express.json());
-app.use(
-  cors({
-    methods: ['GET', 'HEAD', 'OPTIONS', 'PUT', 'POST', 'DELETE'],
-    origin: 'https://personal.com',
-  }),
-);
 
 app.use(logMiddleware);
 app.use('/api/auth', AuthRouter);

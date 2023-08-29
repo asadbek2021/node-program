@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const DEFAULT_PORT = 3001;
 
 export const APP_PORT = Number(process.env.PORT || DEFAULT_PORT);
@@ -5,13 +6,13 @@ export const LOG_LEVEL = process.env.LOG_LEVEL || 'info';
 
 const DEFAULT_POSTGRES = {
   USER: 'postgres',
-  PASSWORD: '',
+  PASSWORD: '12345',
   PORT: 5432,
   DATABASE_NAME: 'postgres',
   HOST: 'localhost',
 };
 
-export const JWT_SECRET = process.env.JWT_SECRET || '';
+export const JWT_SECRET = process.env.JWT_SECRET || 'secret)4';
 
 export const POSTGRES = {
   USER: process.env.POSTGRES_USER || DEFAULT_POSTGRES.USER,

@@ -23,8 +23,7 @@ export async function login(
     res.status(200).send({ message: 'Logged in successfully!', token });
     return;
   } catch (error) {
-    const newError = { ...error, module: 'AUTH', method: 'login' };
-    next(newError);
+    next(error);
   }
 }
 
@@ -42,8 +41,7 @@ export async function register(
     res.status(201).send(newUser);
     return;
   } catch (error) {
-    const newError = { ...error, module: 'AUTH', method: 'login' };
-    next(newError);
+    next(error);
   }
 }
 
